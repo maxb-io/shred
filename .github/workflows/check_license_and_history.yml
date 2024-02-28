@@ -13,6 +13,26 @@ jobs:
     outputs:
       output1: ${{ steps.changes.outputs.diff_list }}
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -20,7 +40,12 @@ jobs:
       - name: Get changed files
         id: changes       
         run: |
+          echo "github.event.pull_request.head.sha"
+          echo ${{ github.event.pull_request.head.sha }} 
+          echo "github.event.pull_request.base.sha"
+          echo ${{ github.event.pull_request.base.sha }}
           echo ${{github.event.pull_request.head.repo.full_name}}
+          echo  echo running on branch ${GITHUB_REF##*/}
           if [ "${{ github.event.pull_request.head.repo.full_name }}" == "maxb-io/shred" ]; then
             echo "files added or changed in a PR that came from the speedb repo: "
             git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}  -- . ':!.github' ':!*.md'
