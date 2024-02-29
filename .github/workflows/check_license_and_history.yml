@@ -35,6 +35,8 @@ jobs:
         env:
           STRATEGY_CONTEXT: ${{ toJson(strategy) }}
         run: echo "$STRATEGY_CONTEXT"
+
+        
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -50,6 +52,8 @@ jobs:
       - name: ls -l
         run: |
           ls -l
+
+          
       - name: Get changed files
         id: changes       
         run: |
@@ -59,23 +63,26 @@ jobs:
           echo ${{ github.event.pull_request.base.sha }}
           echo ${{github.event.pull_request.head.repo.full_name}}
           echo  echo running on branch ${GITHUB_REF##*/}
-          if [ "${{ github.event.pull_request.head.repo.full_name }}" == "maxb-io/shred" ]; then
-            echo "files added or changed in a PR that came from the speedb repo: "
+         
+          #if [ "${{ github.event.pull_request.head.repo.full_name }}" == "maxb-io/shred" ]; then
+          # echo "files added or changed in a PR that came from the speedb repo: "
             git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}  -- . ':!.github' ':!*.md'
             echo "diff_list<<EOF" >> $GITHUB_OUTPUT
             git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}  -- . ':!.github' ':!*.md' >> $GITHUB_OUTPUT
             git diff --name-only --diff-filter=ACMRT remotes/origin/main HEAD  -- . ':!.github' ':!*.md' >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
-          else  
+          #else  
             echo "added or changed files: "
             git diff --name-only --diff-filter=ACMRT remotes/origin/main HEAD  -- . ':!.github' ':!*.md'
             echo "diff_list<<EOF" >> $GITHUB_OUTPUT
             git diff --name-only --diff-filter=ACMRT remotes/origin/main HEAD  -- . ':!.github' ':!*.md' >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
-          fi
+          #fi
       - name: list new files
         run: |
           echo "New files in this PR ${{ steps.changes.outputs.diff_list }}"
+
+          
   lint:
     runs-on: ubuntu-latest
     needs: changedfiles
