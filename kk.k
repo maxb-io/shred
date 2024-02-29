@@ -1,3 +1,3 @@
-Copyright (C) 2024 Shred Ltd. All rights reserved.
+Copyright (C) 2024 Speedb Ltd. All rights reserved.
 kkk
 kk
