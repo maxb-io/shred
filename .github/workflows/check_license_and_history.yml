@@ -40,6 +40,10 @@ jobs:
       - name: Git log
         run: | 
           git log --graph --decorate --oneline --all
+      - name: git branch
+        run: git branch
+      - name: git branch -a
+        run: git branch --all
       - name: ls -l
         run: |
           ls -l
