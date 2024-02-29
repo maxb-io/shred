@@ -1,1 +1,1 @@
-hist 1
+hist 2
